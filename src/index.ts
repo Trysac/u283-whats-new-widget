@@ -1,20 +1,18 @@
 /**
- * Public entry point of @trysac/whats-new-widget.
- *
- * Replace this placeholder with the utility's real API. Keep every export documented and covered by tests.
+ * Main entry point for @trysac/whats-new-widget.
+ * Exports all public APIs.
  */
 
-/**
- * Builds a greeting for `name`.
- *
- * @param name - Who to greet. Surrounding whitespace is ignored.
- * @returns The greeting, for example `"Hello, Ada!"`.
- * @throws {TypeError} When `name` is empty after trimming.
- */
-export function greet(name: string): string {
-  const trimmed = name.trim();
-  if (trimmed === "") {
-    throw new TypeError("name must not be empty");
-  }
-  return `Hello, ${trimmed}!`;
-}
+export { WidgetError, type WidgetErrorCode } from "./errors.js";
+export { parseEntries } from "./parse.js";
+export { renderWidget } from "./render.js";
+export { createWidgetState } from "./state.js";
+export type {
+  Entry,
+  ParseOptions,
+  RenderOptions,
+  StateOptions,
+  StorageLike,
+  WidgetEvent,
+} from "./types.js";
+export { unreadCount } from "./unread.js";

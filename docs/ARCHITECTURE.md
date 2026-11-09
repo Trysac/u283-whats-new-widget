@@ -2,29 +2,26 @@
 
 ## Overview
 
-`@trysac/whats-new-widget` is a small, dependency-free TypeScript library published to npm as ES modules with type
-declarations. Framework-free core of an embeddable whats-new widget: validated changelog entries, unread counts from a stored last-seen id, and escaped accessible HTML
+The `whats-new-widget` library provides four pure functions and a state manager, all implemented in TypeScript with strict typing and zero runtime dependencies.
 
 ## Modules
 
-| Module | Responsibility |
-|---|---|
-| `src/index.ts` | Public API. Everything consumers import is exported from here. |
+- `src/types.ts`: shared TypeScript interfaces.
+- `src/errors.ts`: `WidgetError` class with machine-readable codes.
+- `src/parse.ts`: JSON parsing, validation, and sorting.
+- `src/unread.ts`: unread count calculation.
+- `src/render.ts`: HTML generation with thorough escaping.
+- `src/state.ts`: storage-backed last-seen ID management.
+- `src/index.ts`: public exports.
 
-Add a row when you add a module. Internal modules are not re-exported unless they are part of the public API.
+## Design decisions
 
-## Boundaries
+1. **Validation before use**: `parseEntries` enforces byte and entry limits, validates all fields, and detects duplicates before sorting. This prevents malformed data from reaching rendering or state logic.
+2. **Deterministic ordering**: Entries are sorted by date descending then ID ascending. This stable order simplifies unread counting and rendering.
+3. **Pure rendering**: `renderWidget` has no side effects and produces a single-line HTML string. All text and attribute values are escaped; no inline styles or scripts are emitted, ensuring CSP compatibility.
+4. **Safe storage handling**: `createWidgetState` never throws on storage errors; it reports them via an optional callback, allowing callers to handle failures gracefully (e.g., Safari private mode).
 
-- No runtime dependencies by default; any addition is justified in [STACK.md](STACK.md).
-- No I/O at import time. Functions are pure unless their documentation says otherwise.
-- Errors are thrown as built-in error types (`TypeError`, `RangeError`) with actionable messages.
+## Extensibility
 
-## Build and distribution
-
-`npm run build` compiles `src/` to `dist/` with `tsconfig.build.json`. Only `dist/` is published
-(`files` in `package.json`).
-
-## Decisions
-
-Architectural decisions are recorded in [decisions/](decisions/), starting with
-[0001](decisions/0001-record-architecture-decisions.md).
+- Additional entry fields can be added by extending the `Entry` interface and updating validation/render logic.
+- Custom storage backends (e.g., in-memory for SSR) can implement `StorageLike`.
