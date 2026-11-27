@@ -8,9 +8,15 @@ Framework-free core for an embeddable "what's new" widget: validated changelog e
 
 ## Installation
 
-```bash
-npm install @trysac/whats-new-widget
+Not published to npm yet. Build it from a clone, then install it from the local path:
+
+```sh
+git clone https://github.com/Trysac/u283-whats-new-widget.git
+cd u283-whats-new-widget && npm ci && npm run build
+cd ../your-project && npm install ../u283-whats-new-widget
 ```
+
+Imports keep the package name: `import { ... } from "@trysac/whats-new-widget"`.
 
 ## Quick usage
 
